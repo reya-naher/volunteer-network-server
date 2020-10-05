@@ -51,7 +51,7 @@ client.connect(err => {
   })
 
   app.get('/works', (req, res) => {
-    WorksCollection.find({})
+    WorksCollection.find({}).limit(20)
       .toArray((err, documents) => {
       res.send(documents)
     })
