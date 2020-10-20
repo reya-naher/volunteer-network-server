@@ -51,14 +51,15 @@ client.connect(err => {
   })
 
   app.get('/works', (req, res) => {
-    WorksCollection.find({}).limit(20)
+    WorksCollection.find({})
       .toArray((err, documents) => {
       res.send(documents)
     })
 })
 
-app.delete('/delete/:id', (req, res) => {
-  volunteerCollection.deleteOne({ _id: ObjectId(req.params.id) })
+app.delete('/delete/:num', (req, res) => {
+  // volunteerCollection.deleteOne({ _id: ObjectId(req.params.id) })
+  volunteerCollection.deleteOne({ _id: ObjectId(req.params.num) })
     .then(result => {
       res.send(result.deletedCount > 0)
   })
