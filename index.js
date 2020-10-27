@@ -45,7 +45,6 @@ client.connect(err => {
     app.post('/addWorks', (req, res) => {
       const file = req.files.file;
       const name = req.body.name;
-      const description = req.body.description;
       const newImg = file.data;
       const encImg = newImg.toString('base64');
   
@@ -55,10 +54,11 @@ client.connect(err => {
           img: Buffer.from(encImg,'base64')
         }
   
-        WorksCollection.insertOne({ name, description, image })
+        WorksCollection.insertOne({ name, image })
           .then(result => {
-              res.send(result.insertedCount > 0)   
-        })     
+            console.log(result)
+            res.send(result.insertedCount > 0)   
+          })  
     })
 
   app.get('/works', (req, res) => {
