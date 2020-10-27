@@ -42,13 +42,24 @@ client.connect(err => {
       })
     })
 
-  app.post('/addWorks', (req, res) => {
-    const works = req.body;
-    WorksCollection.insertOne(works)
-      .then(result => {
-      res.send(result.insertedCount)
-     })
-  })
+    app.post('/addWorks', (req, res) => {
+      const file = req.files.file;
+      const name = req.body.name;
+      const description = req.body.description;
+      const newImg = file.data;
+      const encImg = newImg.toString('base64');
+  
+        var image = {
+          contentType: file.mimetype,
+          size: file.size,
+          img: Buffer.from(encImg,'base64')
+        }
+  
+        WorksCollection.insertOne({ name, description, image })
+          .then(result => {
+              res.send(result.insertedCount > 0)   
+        })     
+    })
 
   app.get('/works', (req, res) => {
     WorksCollection.find({})
