@@ -22,7 +22,6 @@ client.connect(err => {
   const WorksCollection = client.db("volunteer").collection("works");
   const volunteerCollection = client.db("volunteer").collection("volunteerInfo");
 
-
   
     app.get('/activities', (req, res) => {
       volunteerCollection.find({email: req.query.email})
@@ -38,13 +37,6 @@ client.connect(err => {
       })
     })
   
-    app.delete('/delete/:num', (req, res) => {
-      volunteerCollection.deleteOne({ _id: ObjectId(req.params.num) })
-        .then(result => {
-          res.send(result.deletedCount > 0)
-      })
-    })
-
     app.post('/addWorks', (req, res) => {
       const file = req.files.file;
       const name = req.body.name;
@@ -62,7 +54,6 @@ client.connect(err => {
           })  
     })
 
-
     app.post('/addVolunteerTasks', (req, res) => {
       const tasks = req.body;
       volunteerCollection.insertOne(tasks)
@@ -71,15 +62,19 @@ client.connect(err => {
        })
     })
 
-
-
+    app.delete('/delete/:num', (req, res) => {
+      volunteerCollection.deleteOne({ _id: ObjectId(req.params.num) })
+        .then(result => {
+          res.send(result.deletedCount > 0)
+      })
+    })
+  
   app.get('/works', (req, res) => {
     WorksCollection.find({})
       .toArray((err, documents) => {
       res.send(documents)
     })
 })
-
 
 
 
