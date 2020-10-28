@@ -63,7 +63,7 @@ client.connect(err => {
     })
 
     app.delete('/delete/:num', (req, res) => {
-      volunteerCollection.deleteOne({ _id: ObjectId(req.params.num) })
+      volunteerCollection.deleteOne({ _id:req.params.num })
         .then(result => {
           res.send(result.deletedCount > 0)
       })
