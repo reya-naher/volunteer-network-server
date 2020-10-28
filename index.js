@@ -12,6 +12,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 app.use(bodyParser.json())
 app.use(cors())
+
 app.use(fileUpload())
 
 const port = 5000
@@ -22,13 +23,6 @@ client.connect(err => {
   const volunteerCollection = client.db("volunteer").collection("volunteerInfo");
 
 
-  app.post('/addVolunteerTasks', (req, res) => {
-    const tasks = req.body;
-    volunteerCollection.insertOne(tasks)
-      .then(result => {
-      res.send(result.insertedCount > 0)
-     })
-  })
   
     app.get('/activities', (req, res) => {
       volunteerCollection.find({email: req.query.email})
@@ -41,6 +35,13 @@ client.connect(err => {
       volunteerCollection.find({})
         .toArray((err, documents) => {
         res.send(documents)
+      })
+    })
+  
+    app.delete('/delete/:num', (req, res) => {
+      volunteerCollection.deleteOne({ _id: ObjectId(req.params.num) })
+        .then(result => {
+          res.send(result.deletedCount > 0)
       })
     })
 
@@ -57,10 +58,20 @@ client.connect(err => {
   
         WorksCollection.insertOne({ name, image })
           .then(result => {
-            console.log(result)
             res.send(result.insertedCount > 0)   
           })  
     })
+
+
+    app.post('/addVolunteerTasks', (req, res) => {
+      const tasks = req.body;
+      volunteerCollection.insertOne(tasks)
+        .then(result => {
+        res.send(result.insertedCount > 0)
+       })
+    })
+
+
 
   app.get('/works', (req, res) => {
     WorksCollection.find({})
@@ -69,13 +80,7 @@ client.connect(err => {
     })
 })
 
-app.delete('/delete/:num', (req, res) => {
-  // volunteerCollection.deleteOne({ _id: ObjectId(req.params.id) })
-  volunteerCollection.deleteOne({ _id: ObjectId(req.params.num) })
-    .then(result => {
-      res.send(result.deletedCount > 0)
-  })
-})
+
 
 
 });
