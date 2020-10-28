@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const fileUpload = require('express-fileupload');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId
 
@@ -11,6 +12,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 app.use(bodyParser.json())
 app.use(cors())
+app.use(fileUpload())
 
 const port = 5000
 
@@ -47,7 +49,6 @@ client.connect(err => {
       const name = req.body.name;
       const newImg = file.data;
       const encImg = newImg.toString('base64');
-  
         var image = {
           contentType: file.mimetype,
           size: file.size,
